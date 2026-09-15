@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "772957924870",
+    "firebase_url": "https://nadir-clothes-default-rtdb.firebaseio.com",
+    "project_id": "nadir-clothes",
+    "storage_bucket": "nadir-clothes.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772957924870:android:798520a10bf32df3655d87",
+        "android_client_info": {
+          "package_name": "com.digizier.nadir_clothes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772957924870-grjsnr8g8ljinvgpg7im37ac6e5quafv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9OylVigdMu1FlZtN0lkhU4AlyEJDLz5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772957924870-grjsnr8g8ljinvgpg7im37ac6e5quafv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,16 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase/supabase.dart';
+import '../core/constants.dart';
 import '../models/clothing_product.dart';
 import '../models/cart_item.dart';
 import '../models/order_model.dart';
 
 class SupabaseService {
-  final SupabaseClient _client = Supabase.instance.client;
+  static final SupabaseClient _client = SupabaseClient(
+    AppConstants.supabaseUrl,
+    AppConstants.supabaseAnonKey,
+  );
+
+  SupabaseClient get client => _client;
 
   // 1. Fetch Categories
   Future<List<Map<String, dynamic>>> getCategories() async {
@@ -42,10 +48,9 @@ class SupabaseService {
     required double deliveryFee,
     required double totalAmount,
   }) async {
-    // Generate Order Number: NC-XXXXXX
     final orderNum = 'NC-${(100000 + DateTime.now().millisecondsSinceEpoch % 900000)}';
 
-    // A. Insert Order
+    // Insert Order
     final orderRes = await _client.from('orders').insert({
       'order_number': orderNum,
       'customer_name': customerName,
@@ -62,7 +67,7 @@ class SupabaseService {
 
     final orderId = orderRes['id'];
 
-    // B. Insert Order Items
+    // Insert Order Items
     final itemsPayload = cartItems.map((item) => {
       'order_id': orderId,
       'product_id': item.product.id,

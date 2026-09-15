@@ -30,6 +30,17 @@ jobs:
         run: |
           flutter create . --org com.digizier --project-name nadir_clothes --platforms android
 
+      - name: Enforce Gradle 8.7 Compatibility
+        run: |
+          mkdir -p android/gradle/wrapper
+          cat << 'EOF' > android/gradle/wrapper/gradle-wrapper.properties
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-all.zip
+          EOF
+
       - name: Get Dependencies
         run: flutter pub get
 

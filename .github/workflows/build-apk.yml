@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK and AAB
 
 on:
   push:
@@ -26,18 +26,37 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Setup local.properties
+      - name: Recreate Official Android Platform
         run: |
-          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          # 1. Backup google-services.json
+          cp android/app/google-services.json /tmp/google-services.json
+          
+          # 2. Remove incomplete android folder
+          rm -rf android
+          
+          # 3. Generate pristine official Flutter Android wrapper with real GradleWrapper jar & mipmap icons
+          flutter create . --org com.digizier --project-name nadir_clothes --platforms android
+          
+          # 4. Restore google-services.json
+          cp /tmp/google-services.json android/app/google-services.json
+          
+          # 5. Add Google services plugin to android/app/build.gradle
+          sed -i 's/plugins {/plugins {\n    id "com.google.gms.google-services"/' android/app/build.gradle
+          sed -i 's/plugins {/plugins {\n    id "com.google.gms.google-services" version "4.4.2" apply false/' android/settings.gradle
 
       - name: Get Dependencies
         run: flutter pub get
 
-      - name: Build APK (Release)
+      - name: Build Release APK
         run: flutter build apk --release
 
-      - name: Upload APK Artifact
+      - name: Build Release AAB (App Bundle)
+        run: flutter build appbundle --release
+
+      - name: Upload APK & AAB Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: nadir-clothes-app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: nadir-clothes-android-builds
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
